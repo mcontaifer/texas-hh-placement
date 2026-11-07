@@ -1,0 +1,1791 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Texas Home Health Placement</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Find Texas home health agencies by the insurance they accept.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one search box, one column of results. Nothing else competes for attention. */
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --ink:#16233A; --muted:#5E6A7D; --line:#DCE1E8;
+  --accent:#1F4FA8; --accent-soft:#E4EBF8; --ok:#1C7A4A; --warn:#8F5600; --warn-soft:#FBEBD0; --bad:#A32D2D; --bad-soft:#F8E0E0;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1522; --surface:#172033; --ink:#E6EBF3; --muted:#9AA6BA; --line:#2A3650;
+  --accent:#8DB0FF; --accent-soft:#22345A; --ok:#6FD39C; --warn:#F0B864; --warn-soft:#3D2C10; --bad:#F29A9A; --bad-soft:#3E1C1C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1522; --surface:#172033; --ink:#E6EBF3; --muted:#9AA6BA; --line:#2A3650;
+  --accent:#8DB0FF; --accent-soft:#22345A; --ok:#6FD39C; --warn:#F0B864; --warn-soft:#3D2C10; --bad:#F29A9A; --bad-soft:#3E1C1C; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+.wrap{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding-block:40px 8px}
+.toprow{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6vw,34px);letter-spacing:-.01em;margin:0;text-wrap:balance}
+.addlink{font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap}
+.addlink:hover{text-decoration:underline}
+.sub{color:var(--muted);margin:4px 0 0}
+.box{position:relative;margin-top:20px}
+#q{width:100%;font:inherit;font-size:19px;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:15px 16px}
+#q:focus{outline:none;border-color:var(--accent)}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pick{font:inherit;font-size:14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer}
+.pick:hover{border-color:var(--accent);color:var(--accent)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.status{color:var(--muted);font-size:14px;margin:22px 0 10px}
+.status b{color:var(--ink)}
+.hint{background:var(--accent-soft);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:12px}
+#results{display:grid;gap:10px;padding-bottom:16px}
+.r{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;min-width:0}
+.r h2{font-size:18px;font-weight:700;margin:0;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.tag{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:4px;padding:2px 7px}
+.t-ok{background:var(--accent-soft);color:var(--ok)}
+.t-sug{background:var(--warn-soft);color:var(--warn)}
+.t-bad{background:var(--bad-soft);color:var(--bad)}
+.takes{font-size:15px}
+.takes .w{color:var(--warn);font-weight:600;font-size:13px}
+.reach{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:15px}
+.reach span.k{color:var(--muted);font-size:13px;margin-right:6px}
+.num{font-family:var(--mono);font-weight:500;color:var(--ink);text-decoration:none;white-space:nowrap}
+a.num{color:var(--accent)}
+.area{font-size:14px;color:var(--muted)}
+.foot{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+.stale{color:var(--warn);font-weight:600}
+.send{color:var(--accent);font-weight:600;text-decoration:none}
+.send:hover{text-decoration:underline}
+details summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;list-style:none;width:max-content}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:" ▾"}
+details[open] summary::after{content:" ▴"}
+.more{display:grid;gap:10px;margin-top:10px;font-size:14px}
+.more h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 2px}
+.more p{margin:0}
+.more ul{margin:0;padding-left:18px}
+.email{word-break:break-all}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--muted)}
+.empty a{color:var(--accent)}
+footer{color:var(--muted);font-size:13px;padding-block:20px 40px;border-top:1px solid var(--line);margin-top:16px}
+footer p{margin:0 0 6px}
+footer a{color:var(--accent)}
+</style>
+</head><body>
+
+
+<div class="wrap">
+<header>
+  <div class="toprow">
+    <h1>Texas Home Health Placement</h1>
+    <a class="addlink" id="addAgency" href="#">+ Add an agency</a>
+  </div>
+  <p class="sub">Type an insurance to find home health agencies that take it.</p>
+  <div class="box">
+    <input id="q" type="search" placeholder="e.g. Humana PPO, WellMed, Medicaid" autocomplete="off" autofocus aria-label="Insurance" list="sugg">
+    <datalist id="sugg"></datalist>
+  </div>
+  <div class="picks" id="picks"></div>
+</header>
+
+<main>
+  <div class="status" id="status"></div>
+  <div id="results"></div>
+</main>
+
+<footer>
+  <p><b>Always verify</b> the specific plan, county and service with the agency before sending a referral. Lists change.</p>
+  <p>Tip: add a city or county to narrow it down, e.g. “WellMed Greenville”.</p>
+  <p>Got a newer insurance list, a new agency, or a correction? Email it to <a id="mailFoot" href="#"></a>. A photo of the card or brochure is enough.</p>
+  <p id="upd"></p>
+</footer>
+</div>
+
+<script type="application/json" id="data">
+{
+ "kinds": {
+  "M": "Traditional Medicare",
+  "A": "Medicare Advantage",
+  "C": "Commercial",
+  "D": "Medicaid / STAR+PLUS",
+  "X": "Marketplace (ACA)",
+  "V": "Military / VA",
+  "W": "Workers' comp / auto / DOL",
+  "P": "Private pay",
+  "O": "Other / unclear"
+ },
+ "flags": {
+  "partial": "some plans only (**)",
+  "case": "case by case",
+  "therapy": "therapy only",
+  "soon": "coming soon",
+  "suggested": "suggested in chat",
+  "confirmed": "confirmed by phone",
+  "uncertain": "unclear on card"
+ },
+ "aliases": {
+  "Medicare": [
+   "traditional medicare",
+   "original medicare",
+   "mcr"
+  ],
+  "Humana": [
+   "gold plus"
+  ],
+  "WellMed": [
+   "uhc wellmed",
+   "wellmed hmo"
+  ],
+  "WellPoint": [
+   "amerigroup",
+   "wellpoint mcr"
+  ],
+  "UHC": [
+   "united",
+   "unitedhealthcare",
+   "united healthcare",
+   "aarp"
+  ],
+  "BCBS": [
+   "blue cross",
+   "blue shield",
+   "bluecross",
+   "anthem",
+   "blue advantage",
+   "blue essentials",
+   "healthselect"
+  ],
+  "HealthSpring": [
+   "healthsprings",
+   "cigna healthspring"
+  ],
+  "WellCare/Allwell": [
+   "wellcare",
+   "allwell"
+  ],
+  "BSW": [
+   "baylor",
+   "scott & white",
+   "scott and white",
+   "senior care plan"
+  ],
+  "SWHR": [
+   "southwestern health resources",
+   "utsw",
+   "ut southwestern",
+   "texas health resources",
+   "thr"
+  ],
+  "Superior": [
+   "superior healthplan",
+   "star+plus",
+   "star plus",
+   "starplus"
+  ],
+  "Medicaid": [
+   "star+plus",
+   "star plus",
+   "starplus",
+   "dads"
+  ],
+  "Ambetter": [
+   "marketplace",
+   "aca",
+   "obamacare"
+  ],
+  "Oscar": [
+   "marketplace",
+   "aca",
+   "obamacare"
+  ],
+  "PHCS/MultiPlan": [
+   "phcs",
+   "multiplan",
+   "multi plan"
+  ],
+  "Tricare/TriWest": [
+   "tricare",
+   "triwest",
+   "military"
+  ],
+  "VA": [
+   "champva",
+   "veterans",
+   "military"
+  ],
+  "Workers' comp": [
+   "workers comp",
+   "work comp",
+   "wc",
+   "texas mutual",
+   "sedgwick",
+   "zurich"
+  ],
+  "Auto/MVA": [
+   "mva",
+   "auto",
+   "motor vehicle"
+  ],
+  "Dept. of Labor": [
+   "department of labor",
+   "dol"
+  ],
+  "Private pay": [
+   "cash",
+   "self pay"
+  ]
+ },
+ "services": {
+  "nursing": "Skilled nursing",
+  "therapy": "PT / OT / ST",
+  "aide": "Home health aide",
+  "social": "Medical social worker",
+  "iv": "IV / infusion (incl. first dose)",
+  "tpn": "TPN / tube feeds",
+  "woundvac": "Wound vac / wound care",
+  "pleurx": "PleurX / drains",
+  "trach": "Trach care",
+  "catheter": "Catheter care",
+  "peds": "Pediatrics",
+  "lymph": "Lymphedema",
+  "mental": "Mental health support",
+  "hospice": "Hospice / palliative",
+  "privduty": "Private duty nursing",
+  "personal": "Personal care (non-medical)",
+  "ortho": "Ortho / joint replacement",
+  "cardiopulm": "CHF / COPD management",
+  "virtual": "Virtual visits"
+ },
+ "counties": {
+  "Anderson": [
+   "Palestine"
+  ],
+  "Collin": [
+   "Allen",
+   "McKinney",
+   "Plano",
+   "Fairview",
+   "Lucas",
+   "Wylie",
+   "Frisco",
+   "Richardson",
+   "Sachse"
+  ],
+  "Dallas": [
+   "Dallas",
+   "Garland",
+   "Mesquite",
+   "DeSoto",
+   "Irving",
+   "Farmers Branch",
+   "Carrollton",
+   "Richardson",
+   "Sachse"
+  ],
+  "Denton": [
+   "Denton",
+   "Lewisville",
+   "Little Elm",
+   "Justin",
+   "Frisco",
+   "Carrollton"
+  ],
+  "Ellis": [
+   "Waxahachie"
+  ],
+  "Fannin": [
+   "Leonard"
+  ],
+  "Freestone": [
+   "Fairfield"
+  ],
+  "Grayson": [
+   "Sherman",
+   "Denison"
+  ],
+  "Hood": [
+   "Granbury"
+  ],
+  "Hunt": [
+   "Greenville"
+  ],
+  "Johnson": [
+   "Burleson",
+   "Cleburne"
+  ],
+  "Kaufman": [
+   "Forney"
+  ],
+  "Parker": [
+   "Weatherford"
+  ],
+  "Rockwall": [
+   "Rockwall"
+  ],
+  "Smith": [
+   "Tyler"
+  ],
+  "Tarrant": [
+   "Fort Worth",
+   "Grapevine",
+   "Burleson"
+  ],
+  "Van Zandt": [
+   "Wills Point"
+  ]
+ },
+ "agencies": [
+  {
+   "name": "AA&G Home Healthcare",
+   "status": [
+    "card"
+   ],
+   "office": "1255 Rio Bravo Rd, Justin, TX 76247 (Denton Co.)",
+   "ins": [
+    [
+     "Medicaid",
+     "D",
+     "TX Medicaid"
+    ],
+    [
+     "Molina",
+     "D",
+     "Molina"
+    ],
+    [
+     "Superior",
+     "D",
+     "Superior"
+    ],
+    [
+     "Medicaid",
+     "D",
+     "DAD(S) — old state aging/disability program"
+    ],
+    [
+     "Private pay",
+     "P",
+     ""
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "area": "Not on file (office in Justin, Denton Co.)",
+   "source": "Card · shared by a rep for a TX Medicaid request, Aug 2026",
+   "phone": "(240) 468-3861",
+   "fax": null,
+   "updated": "2026-08"
+  },
+  {
+   "name": "Advanced Home Health Services",
+   "aka": "an Excelin company",
+   "status": [
+    "card",
+    "confirmed"
+   ],
+   "fax": "(855) 287-6347",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "BCBS",
+     "A",
+     "BCBS Medicare Advantage"
+    ],
+    [
+     "Humana",
+     "A",
+     "Humana Gold HMO"
+    ],
+    [
+     "Humana",
+     "A",
+     "All Humana incl. PPO (per a rep)"
+    ],
+    [
+     "BSW",
+     "A",
+     "BSW Senior Care Plan"
+    ],
+    [
+     "Molina",
+     "A",
+     "Molina Medicare"
+    ],
+    [
+     "Tricare/TriWest",
+     "V",
+     "Tricare & TriWest"
+    ],
+    [
+     "UHC",
+     "A",
+     "UHC",
+     "partial"
+    ],
+    [
+     "WellMed",
+     "A",
+     "WellMed",
+     "partial"
+    ],
+    [
+     "Aetna",
+     "A",
+     "Aetna Medicare Advantage",
+     "partial"
+    ]
+   ],
+   "svc": [
+    "nursing",
+    "therapy",
+    "virtual"
+   ],
+   "counties": [
+    "Denton",
+    "Tarrant*",
+    "Dallas*",
+    "Collin*"
+   ],
+   "cities": [
+    "Sachse"
+   ],
+   "area": "Denton Co., part of Tarrant Co., and Sachse",
+   "notes": "Some plans only (**) on UHC, WellMed and Aetna Medicare Advantage. Confirm the exact plan with the agency.",
+   "source": "Brochure + confirmed by a account executive with the agency",
+   "phone": "(972) 445-9117",
+   "office": "1212 Corporate Dr, Ste 125, Irving, TX",
+   "updated": "2026-09"
+  },
+  {
+   "name": "Am Care Pro",
+   "status": [
+    "card"
+   ],
+   "fax": "(844) 979-1272",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "Aetna",
+     "C",
+     "Aetna"
+    ],
+    [
+     "Allegiance",
+     "C",
+     "Allegiance"
+    ],
+    [
+     "BSW",
+     "A",
+     "BSW Medicare",
+     "case"
+    ],
+    [
+     "BCBS",
+     "A",
+     "BCBS Medicare",
+     "case"
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS commercial"
+    ],
+    [
+     "VA",
+     "V",
+     "ChampVA"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna"
+    ],
+    [
+     "Dept. of Labor",
+     "W",
+     "DOL"
+    ],
+    [
+     "GEHA",
+     "C",
+     "GEHA"
+    ],
+    [
+     "Humana",
+     "A",
+     "Humana PPO",
+     "case"
+    ],
+    [
+     "Imperial",
+     "O",
+     "Imperial"
+    ],
+    [
+     "Meritain",
+     "C",
+     "Meritain"
+    ],
+    [
+     "Molina",
+     "A",
+     "Molina Medicare/Dual",
+     "uncertain"
+    ],
+    [
+     "PHCS/MultiPlan",
+     "C",
+     "PHCS"
+    ],
+    [
+     "Superior",
+     "D",
+     "Superior Medicare/Dual"
+    ],
+    [
+     "Tricare/TriWest",
+     "V",
+     "Tricare"
+    ],
+    [
+     "UMR",
+     "C",
+     "UMR"
+    ],
+    [
+     "UHC",
+     "A",
+     "UHC",
+     "case"
+    ],
+    [
+     "VA",
+     "V",
+     "VA"
+    ],
+    [
+     "WellCare/Allwell",
+     "A",
+     "WellCare Medicare",
+     "case"
+    ],
+    [
+     "WellMed",
+     "A",
+     "WellMed",
+     "case"
+    ],
+    [
+     "WellPoint",
+     "A",
+     "WellPoint",
+     "case"
+    ],
+    [
+     "Workers' comp",
+     "W",
+     "Workers' comp"
+    ]
+   ],
+   "svc": [
+    "nursing",
+    "therapy",
+    "aide",
+    "social",
+    "iv",
+    "woundvac",
+    "hospice",
+    "ortho"
+   ],
+   "counties": [
+    "Dallas",
+    "Collin",
+    "Denton",
+    "Ellis",
+    "Tarrant",
+    "Rockwall",
+    "Kaufman"
+   ],
+   "area": "Dallas, Collin, Denton, Ellis, Tarrant, Rockwall, Kaufman counties",
+   "notes": "Medicare Advantage and HMO/EPO plans accepted case by case. Also: transitional/post-acute, complex care, spine/ortho, ortho trauma, sports medicine.",
+   "source": "Card · shared by a rep for WellMed HMO",
+   "phone": "(214) 987-2100",
+   "email": "intake@amcarepro.com",
+   "web": "amcarepro.com",
+   "office": "1222 E Arapaho Rd #305, Richardson, TX 75081",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Amatus Health Care",
+   "status": [
+    "card"
+   ],
+   "fax": "(817) 628-0600",
+   "office": "2100 Valley View Ln, Ste 200, Dallas, TX 75234",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS"
+    ],
+    [
+     "Aetna",
+     "C",
+     "Aetna PPO"
+    ],
+    [
+     "Humana",
+     "A",
+     "Humana PPO"
+    ],
+    [
+     "Tricare/TriWest",
+     "V",
+     "Tricare West"
+    ],
+    [
+     "PHCS/MultiPlan",
+     "C",
+     "PHCS"
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "area": "Not on file (office in Dallas)",
+   "source": "Card · shared by a rep for BCBS",
+   "phone": "(972) 249-4999",
+   "updated": "2026-11",
+   "notes": "A hospital referral list from 2025 shows fax (972) 468-6991. Confirm which fax they use."
+  },
+  {
+   "name": "Angels Care Home Health",
+   "status": [
+    "card"
+   ],
+   "fax": "(903) 729-3302",
+   "office": "2000 S. Royall St, Palestine, TX 75801",
+   "ins": [],
+   "svc": [],
+   "counties": [
+    "Anderson",
+    "Freestone*"
+   ],
+   "cities": [
+    "Palestine",
+    "Fairfield"
+   ],
+   "area": "Palestine & surrounding areas (suggested for Fairfield)",
+   "notes": "Insurance list not on file.",
+   "source": "Card · shared by a rep",
+   "phone": "(903) 729-2201",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Boundless Home Health",
+   "status": [
+    "card"
+   ],
+   "fax": "(469) 333-8002",
+   "office": "801 E Plano Pkwy, Ste 216, Plano, TX 75074",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "BCBS",
+     "A",
+     "BCBS Medicare PPO"
+    ],
+    [
+     "Cigna",
+     "A",
+     "Cigna Medicare PPO/HMO"
+    ],
+    [
+     "BSW",
+     "A",
+     "BSW Medicare PPO/HMO"
+    ],
+    [
+     "UHC",
+     "A",
+     "UHC Medicare PPO"
+    ],
+    [
+     "WellPoint",
+     "A",
+     "WellPoint Medicare PPO/HMO"
+    ],
+    [
+     "Aetna",
+     "A",
+     "Aetna Medicare PPO/HMO"
+    ],
+    [
+     "HealthSpring",
+     "A",
+     "HealthSpring PPO/HMO"
+    ],
+    [
+     "WellCare/Allwell",
+     "A",
+     "WellCare PPO/HMO"
+    ],
+    [
+     "Superior",
+     "D",
+     "Superior PPO/HMO"
+    ],
+    [
+     "Ambetter",
+     "X",
+     "Ambetter PPO/HMO"
+    ],
+    [
+     "Oscar",
+     "X",
+     "Oscar"
+    ],
+    [
+     "BSW",
+     "C",
+     "BSW PPO/HMO"
+    ],
+    [
+     "UHC",
+     "C",
+     "UHC PPO"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna PPO/HMO"
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS Anthem"
+    ],
+    [
+     "UMR",
+     "C",
+     "UMR PPO"
+    ],
+    [
+     "PHCS/MultiPlan",
+     "C",
+     "MultiPlan, PHCS"
+    ],
+    [
+     "Tricare/TriWest",
+     "V",
+     "Tricare"
+    ],
+    [
+     "Dept. of Labor",
+     "W",
+     "Dept. of Labor"
+    ],
+    [
+     "Workers' comp",
+     "W",
+     "Workers' comp"
+    ]
+   ],
+   "svc": [
+    "nursing",
+    "therapy",
+    "aide",
+    "ortho",
+    "tpn",
+    "woundvac",
+    "iv",
+    "catheter"
+   ],
+   "counties": [
+    "Collin",
+    "Dallas",
+    "Denton",
+    "Grayson",
+    "Kaufman",
+    "Tarrant"
+   ],
+   "cities": [
+    "Allen",
+    "Carrollton",
+    "Dallas",
+    "Denton",
+    "Denison",
+    "Fairview",
+    "Forney",
+    "Frisco",
+    "Fort Worth",
+    "Garland",
+    "Grapevine",
+    "Lewisville",
+    "Little Elm",
+    "Lucas",
+    "McKinney",
+    "Mesquite",
+    "Plano",
+    "Richardson",
+    "Sherman",
+    "Wylie"
+   ],
+   "area": "Allen, Carrollton, Dallas, Denton, Denison, Fairview, Forney, Frisco, Fort Worth, Garland, Grapevine, Lewisville, Little Elm, Lucas, McKinney, Mesquite, Plano, Richardson, Sherman, Tarrant Co., Wylie",
+   "notes": "Infusions include first dose and IVIG. Also bladder washes, ADL and gait training. Care Plus Network provider for Medical City, UT Southwestern, Texas Health Resources.",
+   "source": "Card + brochure · shared by a rep for BCBS",
+   "phone": "(469) 779-6406",
+   "updated": "2026-11"
+  },
+  {
+   "name": "BrightStar Care Home Health",
+   "status": [
+    "card"
+   ],
+   "alert": "No Medicare · no Humana",
+   "fax": "(972) 379-0555",
+   "ins": [
+    [
+     "Superior",
+     "D",
+     "Superior Medicaid (new)",
+     "therapy"
+    ],
+    [
+     "BSW",
+     "C",
+     "Baylor Scott & White (new)"
+    ],
+    [
+     "Ambetter",
+     "X",
+     "Ambetter",
+     "soon"
+    ],
+    [
+     "Molina",
+     "C",
+     "Molina Commercial",
+     "soon"
+    ],
+    [
+     "Molina",
+     "D",
+     "Molina Medicaid",
+     "soon"
+    ],
+    [
+     "BCBS",
+     "C",
+     "Blue Advantage HMO, MyBlue Health, ACO, Anthem, Blue Essentials, Federal, PPO, POS, Blue Choice, Out of State, HealthSelect"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna HMO/PPO/POS/OAP"
+    ],
+    [
+     "Aetna",
+     "C",
+     "Aetna PPO/POS"
+    ],
+    [
+     "UHC",
+     "C",
+     "UHC PPO/POS"
+    ],
+    [
+     "UMR",
+     "C",
+     "UMR PPO"
+    ],
+    [
+     "Meritain",
+     "C",
+     "Meritain"
+    ],
+    [
+     "PHCS/MultiPlan",
+     "C",
+     "PHCS PPO, MultiPlan"
+    ],
+    [
+     "Healthcare Highways",
+     "C",
+     "Healthcare Highways PPO"
+    ],
+    [
+     "Other commercial",
+     "C",
+     "MVP, USAA Medical, HealthScope (DART) ACO, Family Healthcare (Texas Bluebonnet) HMO/PPO, Freedom Life, GHI, Provider Select PPO, LifeWell (Independent Medical Systems), LoneStar Athletic Injury Network"
+    ],
+    [
+     "TPA",
+     "C",
+     "Advant Health, Associates for Health Care, Benefit Planners, Boon Chapman, Centra Benefits, Cypress, DKMS, Entrust, GPA, IBA, Web TPA"
+    ],
+    [
+     "Workers' comp",
+     "W",
+     "Texas Mutual, Sedgwick, Service Lloyds, Care Works, Corvel, Coventry/First Health, HealthSmart, Three Rivers, Walmart WC, TML Risk Pool"
+    ],
+    [
+     "Auto/MVA",
+     "W",
+     "Auto"
+    ],
+    [
+     "Tricare/TriWest",
+     "V",
+     "TriCare; TriWest needs OSH referral"
+    ]
+   ],
+   "svc": [
+    "nursing",
+    "peds",
+    "therapy",
+    "lymph",
+    "social",
+    "aide",
+    "privduty",
+    "iv",
+    "tpn",
+    "woundvac",
+    "pleurx",
+    "catheter"
+   ],
+   "counties": [
+    "Collin",
+    "Dallas",
+    "Rockwall",
+    "Hunt",
+    "Kaufman",
+    "Ellis",
+    "Johnson",
+    "Hood",
+    "Parker",
+    "Tarrant",
+    "Smith",
+    "Denton"
+   ],
+   "cities": [
+    "Grapevine",
+    "Irving",
+    "Dallas",
+    "Plano",
+    "Fort Worth",
+    "Burleson",
+    "Denton"
+   ],
+   "area": "Collin, Dallas, Rockwall, Hunt, Kaufman, Ellis, Johnson, Hood, Parker, Tarrant, Smith (others possible depending on staffing). Branches: Grapevine, Irving, Dallas, Plano, Fort Worth, Burleson, Denton.",
+   "notes": "Several BrightStar offices serve DFW. Fax referrals to the number listed, or call the office nearest the patient. Infusion includes antibiotics with first dose; daily wound vac possible in DFW. Treat Medicaid as therapy only (Superior) until confirmed.",
+   "source": "Card + 2026 brochure · suggested by reps for Medicaid and commercial plans",
+   "phone": null,
+   "web": "brightstarcare.com",
+   "updated": "2026-11"
+  },
+  {
+   "name": "CenterWell Home Health",
+   "status": [
+    "suggested"
+   ],
+   "ins": [
+    [
+     "Humana",
+     "A",
+     "Humana PPO",
+     "suggested"
+    ]
+   ],
+   "svc": [],
+   "counties": [
+    "Van Zandt*"
+   ],
+   "cities": [
+    "Wills Point"
+   ],
+   "area": "Suggested for Wills Point",
+   "notes": "Suggested for a Humana PPO + PleurX request in Wills Point. CenterWell also has offices in Cleburne and Corsicana. Call to find the branch that covers the patient. PleurX and full insurance list not confirmed.",
+   "source": "Suggested by a rep",
+   "phone": "(817) 514-8284",
+   "fax": "(833) 453-1107",
+   "office": "700 E Park Blvd, Ste 104, Plano, TX 75074 (DFW branch)",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Faith First Home Health",
+   "aka": "Also known as Family Faith Home Health",
+   "status": [
+    "card",
+    "suggested"
+   ],
+   "fax": "(972) 399-3210",
+   "office": "2111 Westview Dr, Wills Point, TX 75169",
+   "ins": [],
+   "svc": [],
+   "counties": [
+    "Van Zandt"
+   ],
+   "cities": [
+    "Wills Point"
+   ],
+   "area": "Wills Point (Van Zandt Co.)",
+   "notes": "Insurance list not on file.",
+   "source": "Card + suggested by a account executive",
+   "phone": "(972) 301-7738",
+   "email": "intake@faithfirsthh.com",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Grace Home Health",
+   "status": [
+    "card"
+   ],
+   "fax": "(469) 326-1704",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "UHC",
+     "A",
+     "UHC Medicare"
+    ],
+    [
+     "WellMed",
+     "A",
+     "WellMed"
+    ],
+    [
+     "WellPoint",
+     "A",
+     "WellPoint"
+    ],
+    [
+     "Aetna",
+     "A",
+     "Aetna Medicare PPO"
+    ],
+    [
+     "SWHR",
+     "A",
+     "SWHR Medicare"
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS"
+    ],
+    [
+     "UHC",
+     "C",
+     "UHC"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna"
+    ],
+    [
+     "SWHR",
+     "C",
+     "UTSW/THR network"
+    ],
+    [
+     "UMR",
+     "C",
+     "UMR"
+    ],
+    [
+     "GEHA",
+     "C",
+     "GEHA"
+    ],
+    [
+     "Healthcare Highways",
+     "C",
+     "Healthcare Highways"
+    ],
+    [
+     "Other commercial",
+     "C",
+     "Imagine Health"
+    ],
+    [
+     "TPA",
+     "C",
+     "Web TPA"
+    ],
+    [
+     "PHCS/MultiPlan",
+     "C",
+     "PHCS/MultiPlan"
+    ],
+    [
+     "Workers' comp",
+     "W",
+     "Workers' comp"
+    ],
+    [
+     "Auto/MVA",
+     "W",
+     "MVA"
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "area": "Not on file",
+   "notes": "Website gracehomehealth.com.",
+   "source": "Card · shared by a rep for BCBS commercial",
+   "phone": "(469) 326-1700",
+   "web": "gracehomehealth.com",
+   "office": "12900 Preston Rd, Ste 422, Dallas, TX",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Healing Touch Homecare",
+   "aka": "Greenville",
+   "status": [
+    "confirmed"
+   ],
+   "ins": [
+    [
+     "WellMed",
+     "A",
+     "WellMed HMO",
+     "confirmed"
+    ]
+   ],
+   "svc": [],
+   "counties": [
+    "Hunt"
+   ],
+   "cities": [
+    "Greenville"
+   ],
+   "area": "Greenville (Hunt Co.)",
+   "source": "Confirmed by a account executive by phone, Sep 2026",
+   "phone": "(903) 455-8191",
+   "fax": null,
+   "office": "2304 Joe Ramsey Blvd E, Greenville, TX",
+   "updated": "2026-09"
+  },
+  {
+   "name": "Home Care Providers of Texas",
+   "aka": "Home Health · Personal Care",
+   "status": [
+    "card"
+   ],
+   "fax": "(800) 654-1335",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "WellCare/Allwell",
+     "A",
+     "WellCare"
+    ],
+    [
+     "Tricare/TriWest",
+     "V",
+     "Tricare"
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS"
+    ],
+    [
+     "Aetna",
+     "C",
+     "Aetna"
+    ],
+    [
+     "Humana",
+     "A",
+     "Humana (type not specified)"
+    ],
+    [
+     "WellPoint",
+     "A",
+     "Listed as Amerigroup"
+    ],
+    [
+     "WellMed",
+     "A",
+     "WellMed"
+    ],
+    [
+     "UMR",
+     "C",
+     "UMR"
+    ],
+    [
+     "SWHR",
+     "A",
+     "SWHR"
+    ],
+    [
+     "Molina",
+     "A",
+     "Molina Medicare"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna"
+    ],
+    [
+     "Other",
+     "O",
+     "“UHS” (as written on card)",
+     "uncertain"
+    ],
+    [
+     "Other",
+     "O",
+     "“PCS” (as written on card)",
+     "uncertain"
+    ]
+   ],
+   "svc": [
+    "cardiopulm",
+    "iv",
+    "trach",
+    "tpn",
+    "pleurx",
+    "woundvac",
+    "personal"
+   ],
+   "counties": [],
+   "area": "Not on file",
+   "notes": "IV antibiotics and cardiac infusions, feeding tubes, surgical and PleurX drain management, advanced wound care.",
+   "source": "Brochure",
+   "phone": "(972) 735-0801",
+   "office": "5339 Alpha Rd, Ste 200, Dallas, TX 75240",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Klarus Home Health",
+   "status": [
+    "suggested"
+   ],
+   "ins": [
+    [
+     "BCBS",
+     "C",
+     "BCBS (type not specified)",
+     "suggested"
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "area": "Not on file",
+   "source": "Suggested by a rep",
+   "phone": "(214) 440-1004",
+   "fax": null,
+   "office": "903 N Bowser Rd, Ste 156, Richardson, TX",
+   "updated": "2026-11",
+   "notes": "Listed online as Klarus Home Care."
+  },
+  {
+   "name": "Nautilus Health",
+   "status": [
+    "suggested"
+   ],
+   "ins": [
+    [
+     "Other commercial",
+     "C",
+     "Commercial plans (general)",
+     "suggested"
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "area": "Not on file",
+   "notes": "No phone on file.",
+   "source": "Suggested by a rep",
+   "phone": null,
+   "fax": null,
+   "updated": "2026-11"
+  },
+  {
+   "name": "One Point Health Services",
+   "aka": "One Point Home Health",
+   "status": [
+    "card"
+   ],
+   "fax": "(469) 587-7941",
+   "office": "Davenport Rd, Ste D, Dallas, TX 75252 (street number cut off on card)",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "Aetna",
+     "A",
+     "Aetna HMO/PPO"
+    ],
+    [
+     "WellCare/Allwell",
+     "A",
+     "Allwell"
+    ],
+    [
+     "HealthSpring",
+     "D",
+     "Cigna HealthSpring STAR+PLUS"
+    ],
+    [
+     "Humana",
+     "A",
+     "Humana HMO"
+    ],
+    [
+     "UHC",
+     "A",
+     "UHC"
+    ],
+    [
+     "WellCare/Allwell",
+     "A",
+     "WellCare"
+    ],
+    [
+     "WellMed",
+     "A",
+     "WellMed (incl. WellMed HMO)"
+    ],
+    [
+     "Molina",
+     "A",
+     "Molina"
+    ],
+    [
+     "Molina",
+     "D",
+     "Molina"
+    ],
+    [
+     "SWHR",
+     "A",
+     "SWHR"
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "area": "Not on file",
+   "source": "Card · suggested by reps for WellMed HMO",
+   "phone": "(866) 573-1880",
+   "email": "referrals@onepointhealth.net",
+   "updated": "2026-11"
+  },
+  {
+   "name": "PaceSetters Home Health",
+   "status": [
+    "card"
+   ],
+   "fax": "(469) 448-0077",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "Superior",
+     "D",
+     "Superior STAR+PLUS"
+    ],
+    [
+     "Molina",
+     "D",
+     "Molina STAR+PLUS"
+    ],
+    [
+     "Molina",
+     "X",
+     "Molina Silver/Gold"
+    ],
+    [
+     "WellPoint",
+     "A",
+     "WellPoint HMO / Medicare"
+    ],
+    [
+     "WellPoint",
+     "D",
+     "WellPoint Medicaid"
+    ],
+    [
+     "WellPoint",
+     "C",
+     "WellPoint Commercial"
+    ],
+    [
+     "Aetna",
+     "C",
+     "Aetna PPO"
+    ],
+    [
+     "UHC",
+     "C",
+     "UHC PPO / commercial"
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS PPO"
+    ],
+    [
+     "Humana",
+     "A",
+     "Humana PPO"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna PPO"
+    ]
+   ],
+   "svc": [
+    "nursing",
+    "aide",
+    "therapy",
+    "mental",
+    "social"
+   ],
+   "counties": [],
+   "general": true,
+   "area": "DFW metroplex and surrounding communities",
+   "notes": "Also medical supplies & equipment. Website pacesettershh.com.",
+   "source": "Brochure",
+   "phone": "(817) 345-6890",
+   "email": "info@pacesettershh.com",
+   "web": "pacesettershh.com",
+   "updated": "2026-11"
+  },
+  {
+   "name": "Performance Home Health",
+   "status": [
+    "card"
+   ],
+   "alert": "Commercial only · no Medicare / Medicaid",
+   "fax": "(214) 499-9229",
+   "office": "800 E Campbell Rd, Ste 123, Richardson, TX 75081",
+   "ins": [
+    [
+     "Aetna",
+     "C",
+     "Aetna HMO/PPO"
+    ],
+    [
+     "Ambetter",
+     "X",
+     "Ambetter HMO"
+    ],
+    [
+     "BCBS",
+     "C",
+     "BCBS PPO/Anthem"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna (incl. Open Access Plus)"
+    ],
+    [
+     "UHC",
+     "C",
+     "UHC HMO/PPO"
+    ],
+    [
+     "WellCare/Allwell",
+     "C",
+     "WellCare HMO/PPO — which products?",
+     "uncertain"
+    ],
+    [
+     "UMR",
+     "C",
+     "UMR"
+    ],
+    [
+     "Meritain",
+     "C",
+     "Meritain"
+    ],
+    [
+     "GEHA",
+     "C",
+     "GEHA"
+    ],
+    [
+     "Healthcare Highways",
+     "C",
+     "Healthcare Highways"
+    ],
+    [
+     "Other commercial",
+     "C",
+     "Centene HMO, Choice Fund PPO, Curative HMO/PPO, Select Care HMO/PPO, NALC, Golden Rule, Freedom Life, Cook Children's, Provider Select PPO, Family Healthcare"
+    ],
+    [
+     "TPA",
+     "C",
+     "HealthScope/DART, Boon Chapman, Payer Solutions, Web TPA, IBA, Benefit Planners, Group & Pension, HealthComp, MVP"
+    ],
+    [
+     "Workers' comp",
+     "W",
+     "Texas Mutual, Zurich, Sedgwick, Coventry/First Health"
+    ]
+   ],
+   "svc": [],
+   "counties": [],
+   "cities": [
+    "DeSoto"
+   ],
+   "area": "Not on file (office in Richardson; suggested for DeSoto)",
+   "notes": "Lists WellCare HMO/PPO but no Medicare. Ask which WellCare products they take.",
+   "source": "Card · suggested by a rep for UHC HMO in DeSoto and for BCBS",
+   "phone": "(214) 764-7942",
+   "updated": "2026-09"
+  },
+  {
+   "name": "Renew Home Health",
+   "status": [
+    "card"
+   ],
+   "fax": "(817) 921-6407",
+   "office": "1021 Washington Ave, Fort Worth, TX 76104",
+   "ins": [
+    [
+     "Medicare",
+     "M",
+     ""
+    ],
+    [
+     "UHC",
+     "C",
+     "UHC commercial, PPO, HMO"
+    ],
+    [
+     "UHC",
+     "A",
+     "UHC HMO/PPO"
+    ],
+    [
+     "UMR",
+     "C",
+     "United Medical Resources"
+    ],
+    [
+     "WellMed",
+     "A",
+     "WellMed"
+    ],
+    [
+     "BCBS",
+     "A",
+     "BCBS Medicare Advantage"
+    ],
+    [
+     "BCBS",
+     "A",
+     "BCBS with Medicare secondary"
+    ],
+    [
+     "Aetna",
+     "A",
+     "Aetna Medicare PPO"
+    ],
+    [
+     "Cigna",
+     "C",
+     "Cigna commercial"
+    ]
+   ],
+   "svc": [
+    "aide",
+    "social"
+   ],
+   "counties": [],
+   "cities": [
+    "DeSoto"
+   ],
+   "area": "Not on file (office in Fort Worth; suggested for DeSoto)",
+   "source": "Card · suggested by a rep for UHC WellMed HMO and UHC HMO in DeSoto",
+   "phone": "(817) 921-6400",
+   "updated": "2026-09"
+  }
+ ],
+ "email": "texashhplacement@gmail.com"
+}
+</script>
+
+<script>
+(function(){
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s||'').toLowerCase().replace(/[’']/g,"'").replace(/\s+/g,' ').trim();
+const RANK = {confirmed:0, card:1, suggested:2};
+const WARN = {partial:'some plans only — confirm', case:'case by case', therapy:'therapy only', soon:'coming soon', suggested:'suggested by a rep, not verified', uncertain:'unclear on their card — confirm'};
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const STALE_MONTHS = 6;
+
+const mailto = (subject, body) => `mailto:${D.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+$('addAgency').href = mailto('New agency', 'Agency name:\nInsurances they take:\nCounties / cities they cover:\nOffice phone & fax:\n\n(Attach a photo of their card or brochure if you have one.)');
+$('mailFoot').textContent = D.email;
+$('mailFoot').href = mailto('Placement directory update', '');
+
+function monthLabel(ym){ const [y,m] = ym.split('-').map(Number); return MONTHS[m-1] + ' ' + y; }
+function monthsAgo(ym){ const [y,m] = ym.split('-').map(Number); const n = new Date(); return (n.getFullYear()-y)*12 + (n.getMonth()+1-m); }
+
+// places: county and city names → county
+const places = [];
+Object.entries(D.counties).forEach(([c, cities]) => {
+  places.push([norm(c + ' county'), c], [norm(c), c]);
+  cities.forEach(ci => places.push([norm(ci), c, ci]));
+});
+places.sort((a,b) => b[0].length - a[0].length);
+
+D.agencies.forEach(a => {
+  a.ins.forEach(x => x.blob = norm([x[0], x[2], D.kinds[x[1]], (D.aliases[x[0]]||[]).join(' ')].join(' ')));
+  a.cityset = (a.cities||[]).map(norm);
+});
+
+// suggestions
+const names = new Set();
+D.agencies.forEach(a => a.ins.forEach(x => { if (!['Other','Other commercial','TPA'].includes(x[0])) names.add(x[0]); }));
+Object.values(D.aliases).flat().forEach(v => { if (v.length > 3) names.add(v.replace(/\b\w/g, m => m.toUpperCase())); });
+$('sugg').innerHTML = [...names].sort().map(n => `<option value="${esc(n)}">`).join('');
+['Medicare','Humana','WellMed','WellPoint','UHC','Aetna','BCBS','Cigna','Medicaid','Tricare'].forEach(p => {
+  const b = document.createElement('button'); b.className = 'pick'; b.type = 'button'; b.textContent = p;
+  b.onclick = () => { $('q').value = p; run(); $('q').focus(); };
+  $('picks').appendChild(b);
+});
+const latest = D.agencies.map(a => a.updated).sort().pop();
+$('upd').textContent = D.agencies.length + ' agencies · last change ' + monthLabel(latest);
+
+function run(){
+  let q = norm($('q').value);
+  let place = null;
+  for (const p of places) {
+    const re = new RegExp('(^|\\s)' + p[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '(\\s|$)');
+    if (re.test(q)) { place = p; q = norm(q.replace(re, ' ')); break; }
+  }
+  if (!q && !place) { $('status').innerHTML = ''; $('results').innerHTML = ''; return; }
+  const tokens = q ? q.split(' ') : [];
+  const plainMedicare = q === 'medicare' || q === 'traditional medicare' || q === 'original medicare';
+
+  const out = [];
+  D.agencies.forEach(a => {
+    let hits = [];
+    if (tokens.length) {
+      hits = a.ins.filter(x => plainMedicare ? x[1] === 'M' : tokens.every(t => x.blob.includes(t)));
+      if (!hits.length) return;
+    }
+    let where = 'na';
+    if (place) {
+      const [, county, city] = place;
+      const full = (a.counties||[]).includes(county);
+      const part = (a.counties||[]).includes(county + '*');
+      const cityHit = city && a.cityset.includes(norm(city));
+      if (full || cityHit) where = 'yes';
+      else if (part) where = 'part';
+      else if (!(a.counties||[]).length || a.general) where = 'unknown';
+      else return;
+    }
+    const clean = hits.length ? hits.some(x => !x[3] || x[3] === 'confirmed') : true;
+    out.push({a, hits, where, clean, rank: Math.min(...a.status.map(s => RANK[s]))});
+  });
+  const wRank = {yes:0, na:0, part:1, unknown:2};
+  out.sort((x,y) => (wRank[x.where]-wRank[y.where]) || (y.clean - x.clean) || (x.rank - y.rank) || x.a.name.localeCompare(y.a.name));
+
+  const label = esc($('q').value.trim());
+  $('status').innerHTML = out.length ? `<b>${out.length}</b> ${out.length === 1 ? 'agency' : 'agencies'} for “${label}”` : '';
+  let html = '';
+  if (plainMedicare) html += `<div class="hint">Showing <b>traditional Medicare</b>. For a Medicare Advantage plan, type the plan name, like Humana or WellMed.</div>`;
+  html += out.length ? out.map(card).join('') : `<div class="empty">No agencies on file take “${label}” yet.<br>Try a shorter name, like “Humana” instead of “Humana Gold Plus”.<br><br>Know one that does? <a href="${esc(mailto('New agency for ' + $('q').value.trim(), 'Agency name:\nInsurance:\nArea:\n'))}">Tell us</a>.</div>`;
+  $('results').innerHTML = html;
+}
+
+function card(r){
+  const a = r.a;
+  let tags = '';
+  if (a.status.includes('confirmed')) tags += `<span class="tag t-ok">Confirmed by a rep</span>`;
+  else if (a.status.length === 1 && a.status[0] === 'suggested') tags += `<span class="tag t-sug">Suggestion</span>`;
+  if (a.alert) tags += `<span class="tag t-bad">${esc(a.alert)}</span>`;
+
+  const takes = r.hits.length ? `<div class="takes">✓ ${r.hits.map(x => esc(x[2] || x[0]) + (x[3] && WARN[x[3]] ? ` <span class="w">(${esc(WARN[x[3]])})</span>` : '')).join(' · ')}</div>` : '';
+
+  const tel = n => `<a class="num" href="tel:+1${n.replace(/\D/g,'')}">${esc(n)}</a>`;
+  let reach = '';
+  if (a.phone) reach += `<div><span class="k">Office</span>${tel(a.phone)}</div>`;
+  if (a.fax) reach += `<div><span class="k">Fax</span><span class="num">${esc(a.fax)}</span></div>`;
+  if (!a.phone && !a.fax) reach += a.email ? `<div><span class="k">Email</span><span class="email">${esc(a.email)}</span></div>` : `<div><span class="k">No phone on file</span></div>`;
+
+  let area = esc(a.area);
+  if (r.where === 'part') area = 'Covers part of this area — ' + area;
+  if (r.where === 'unknown') area = 'Coverage area not on file — call to check';
+
+  const allIns = a.ins.length ? `<ul>${a.ins.map(x => `<li>${esc(x[2] || x[0])}${x[3] && WARN[x[3]] ? ` <span class="area">(${esc(WARN[x[3]])})</span>` : ''}</li>`).join('')}</ul>` : '<p>Not on file.</p>';
+  const svc = (a.svc||[]).length ? `<p>${a.svc.map(s => esc(D.services[s])).join(' · ')}</p>` : '<p>Not on file.</p>';
+  const contact = [a.email ? `Email: <span class="email">${esc(a.email)}</span>` : '', a.web ? `Website: ${esc(a.web)}` : '', a.office ? `Office: ${esc(a.office)}` : ''].filter(Boolean).join('<br>');
+
+  const old = monthsAgo(a.updated) >= STALE_MONTHS;
+  const sendHref = mailto('Update: ' + a.name, `Agency: ${a.name}\nWhat changed (insurances, area, phone/fax):\n\n(Attach a photo of their newest card or insurance list if you have one.)`);
+
+  return `<article class="r">
+    <h2>${esc(a.name)} ${tags}</h2>
+    ${takes}
+    <div class="reach">${reach}</div>
+    <div class="area">${area}</div>
+    <details><summary>More details</summary><div class="more">
+      ${contact ? `<div><h3>Contact</h3><p>${contact}</p></div>` : ''}
+      <div><h3>Services</h3>${svc}</div>
+      <div><h3>All insurances listed</h3>${allIns}</div>
+      ${a.notes ? `<div><h3>Notes</h3><p>${esc(a.notes)}</p></div>` : ''}
+      <div><h3>Source</h3><p>${esc(a.source)}</p></div>
+    </div></details>
+    <div class="foot">
+      <span class="${old ? 'stale' : ''}">Info from ${monthLabel(a.updated)}${old ? ' — may be outdated' : ''}</span>
+      <a class="send" href="${esc(sendHref)}">${old ? 'Send a newer list' : 'Send an update'}</a>
+    </div>
+  </article>`;
+}
+
+let t; $('q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(run, 100); });
+run();
+})();
+</script>
+
+</body></html>
